@@ -43,26 +43,25 @@
 						</li>
 						@endif
 						@if(auth()->check())
-                   			@if(auth()->user()->hasRole('admin'))
-                   			<li>
-                   				<a href="{{ URL::to('/admin/show-subscribers') }}"> 
-								Subscribers </a>
-							</li>
-                   			@endif
-                   		@endif
+						@if(auth()->user()->hasRole('admin'))
 						<li>
-						@if(\Auth::check())
-							<a class="page-scroll" href="{{ URL::to('auth/logout') }}">Logout</a>
-						@else
-							<a class="page-scroll" href="{{ URL::route('login_path') }}">Admin</a>
+							<a href="{{ URL::to('/admin/show-subscribers') }}">
+							Subscribers </a>
+						</li>
 						@endif
+						@endif
+						<li>
+							@if(\Auth::check())
+							<a class="page-scroll" href="{{ URL::to('auth/logout') }}">Logout</a>
+							@else
+							<a class="page-scroll" href="{{ URL::route('login_path') }}">Admin</a>
+							@endif
 						</li>
 					</ul>
 				</div>
 			</div>
 		</nav>
 		@yield('content')
-
 		<footer class="container-fluid text-center" style="margin-top:100px;">
 			<p style="padding-top:50px;font-size:10px;">
 				Made with <span class="glyphicon glyphicon-heart" style="color:red;font-size:10px;"></span> by <a href="https://uk.linkedin.com/in/prateek01"> Prateek Singh. </a>

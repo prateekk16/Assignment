@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Category;
 use App\Subscriber;
+use App\Jobs\NewSubscriber;
 
 class PagesController extends Controller
 {
@@ -29,12 +30,8 @@ class PagesController extends Controller
         if($subscribed != null){
             return "You have already Subscribed to this event";
         }else{
-            $new = new Subscriber;
-            $new->name = $request->name;
-            $new->email = $request->email;
-            $new->event_id = $request->event_id;
-            if($new->save())
-                    return "Thank you for Subscribing";
+            $job = new NewSubscriber($request->name, $request->email, $request->event_id );
+            return  $this->dispatch($job);
         }
     }
 }

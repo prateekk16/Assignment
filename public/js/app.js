@@ -27,7 +27,7 @@
             $(btn).attr("disabled", true);
             $(btn).text("Please Wait...");
             callAjax("POST", url, dataString, function(response){
-            if(response == '1'){
+            if(response){
                 $(category).attr("disabled", false);
                 $(btn).attr("disabled", false);
                 $(btn).text("Create a new Category");
@@ -48,7 +48,7 @@
     $( "#all-categories" ).change(function() {
      var options = $("#all-categories");
      var input = $("#category-name");
-     if($(options).val() != ""){
+     if($(options).val() != "--"){
         $(input).attr("disabled", true);
         $(input).val("");
      }else{
@@ -61,7 +61,7 @@
      var input = $("#category-name");
      if($(input).val()){
         $(options).attr("disabled", true);
-        $(options).val("")
+        $(options).val("--")
      }else{
         $(options).attr("disabled", false);
      }

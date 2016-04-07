@@ -8,6 +8,8 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Category;
 use App\Event;
+use App\Jobs\NewCategory;
+use App\Jobs\NewEvent;
 
 class AdminController extends Controller
 {
@@ -20,12 +22,9 @@ class AdminController extends Controller
      */
     public function create(Request $request)
     {
-        $category = new Category;
-        $category->name = $request->cname;
-        if($category->save())
-            return 1;
-
-        return 0;
+        $job = new NewCategory($request->cname);
+        return $this->dispatch($job);
+       
     }
 
     /**
@@ -36,26 +35,23 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        if(trim($request->cname1) != "undefined" && trim($request->ename) != ""){
+        if(trim($request->cname1) != "--" && trim($request->ename) != ""){
             $category = Category::where('id',$request->cname1)->firstOrFail();
-            $event = new Event;
-            $event->name = $request->ename;
-            $event->date = $request->date;
-            $event->save();
+
+            $job = new NewEvent($request->ename, $request->date);
+            $event =  $this->dispatch($job);
+
             if( $category->events()->save($event))
             return 1;
         }elseif(trim($request->cname) != "" && trim($request->ename) != ""){
-            $category = new Category;
-            $category->name = $request->cname;
-            $category->save();
+            $job = new NewCategory($request->cname);
+            $category =  $this->dispatch($job);
 
-            $event = new Event;
-            $event->name = $request->ename;
-            $event->date = $request->date;
-            $event->save();
+            $job1 = new NewEvent($request->ename, $request->date);
+            $event =  $this->dispatch($job1);
 
            if( $category->events()->save($event))
-                return 1;
+            return 1;
         }
         return 0;
     }
